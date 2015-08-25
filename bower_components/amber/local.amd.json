@@ -1,0 +1,17 @@
+{
+    "paths": {
+        "amber": "support",
+        "amber_core": "src"
+    },
+    "shim": {
+        "ensure-console": {
+            "exports": "console"
+        }
+    },
+    "map": {
+        "*": {
+            "00comment": "These are backward compatibility pointers.",
+            "amber_core/Kernel-ImportExport": "amber_core/Platform-ImportExport"
+        }
+    }
+}
