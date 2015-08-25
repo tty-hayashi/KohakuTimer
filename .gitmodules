@@ -1,0 +1,3 @@
+[submodule "sevenSeg.js"]
+	path = sevenSeg.js
+	url = https://github.com/BrandonLWhite/sevenSeg.js.git
