@@ -1,16 +1,16 @@
 define("amber-timer/Timer", ["amber/boot"
 //>>excludeStart("imports", pragmas.excludeImports);
-, "knockout", "amber/jquery/Wrappers-JQuery", "amber/web/Web", "sevenSeg", "silk/Silk"
+, "knockout", "notifyjs", "amber/jquery/Wrappers-JQuery", "amber/web/Web", "sevenSeg", "silk/Silk"
 //>>excludeEnd("imports");
 , "amber_core/Kernel-Objects"], function($boot
 //>>excludeStart("imports", pragmas.excludeImports);
-,ko
+,ko,Notify
 //>>excludeEnd("imports");
 ){"use strict";
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Timer');
 $core.packages["Timer"].innerEval = function (expr) { return eval(expr); };
-$core.packages["Timer"].imports = ["ko=knockout", "amber/jquery/Wrappers-JQuery", "amber/web/Web", "sevenSeg", "silk/Silk"];
+$core.packages["Timer"].imports = ["ko=knockout", "Notify=notifyjs", "amber/jquery/Wrappers-JQuery", "amber/web/Web", "sevenSeg", "silk/Silk"];
 $core.packages["Timer"].transport = {"type":"amd","amdNamespace":"amber-timer"};
 
 $core.addClass('Timer', $globals.Object, ['timerProcess', 'viewModel'], 'Timer');
@@ -26,10 +26,21 @@ function $Terminal(){return $globals.Terminal||(typeof Terminal=="undefined"?nil
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $1;
-$1=self._wantsAlert();
+var $2,$1,$3;
+$2=self._wantsAlert();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["wantsAlert"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2).__eq("dialog");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["="]=1;
+//>>excludeEnd("ctx");
 if($core.assert($1)){
 $recv($Terminal())._alert_("Finish !");
+};
+$3=$recv(self._wantsAlert()).__eq("notify");
+if($core.assert($3)){
+self._notifyFinish();
 };
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -38,10 +49,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "alertFinish\x0a\x09\x0a\x09self wantsAlert ifTrue: [\x0a\x09\x09\x09\x09Terminal alert: 'Finish !']",
+source: "alertFinish\x0a\x09\x0a\x09self wantsAlert = 'dialog' ifTrue: [\x0a\x09\x09\x09\x09Terminal alert: 'Finish !'].\x0a\x09self wantsAlert = 'notify' ifTrue: [\x0a\x09\x09\x09\x09self notifyFinish].\x0a\x09",
 referencedClasses: ["Terminal"],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:", "wantsAlert", "alert:"]
+messageSends: ["ifTrue:", "=", "wantsAlert", "alert:", "notifyFinish"]
 }),
 $globals.Timer);
 
@@ -210,89 +221,6 @@ $globals.Timer);
 
 $core.addMethod(
 $core.method({
-selector: "doStart",
-protocol: 'action',
-fn: function (){
-"use strict";
-
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-self._setupCounter();
-self._setupTimerProcess();
-$1="#start"._asJQuery();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["asJQuery"]=1;
-//>>excludeEnd("ctx");
-$recv($1)._text_("STOP");
-$recv("#start"._asJQuery())._click_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return self._doStop();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"doStart",{},$globals.Timer)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "doStart\x0a\x0a\x09self setupCounter.\x0a\x09self setupTimerProcess.\x0a\x09'#start' asJQuery text: 'STOP'.\x0a\x09'#start' asJQuery click: [self doStop]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["setupCounter", "setupTimerProcess", "text:", "asJQuery", "click:", "doStop"]
-}),
-$globals.Timer);
-
-$core.addMethod(
-$core.method({
-selector: "doStop",
-protocol: 'action',
-fn: function (){
-"use strict";
-
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-self._stopTimerProcess();
-$1="#start"._asJQuery();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["asJQuery"]=1;
-//>>excludeEnd("ctx");
-$recv($1)._text_("START");
-$recv("#start"._asJQuery())._click_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return self._doStart();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"doStop",{},$globals.Timer)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "doStop\x0a\x0a\x09self stopTimerProcess.\x0a\x09'#start' asJQuery text: 'START'.\x0a\x09'#start' asJQuery click: [self doStart]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["stopTimerProcess", "text:", "asJQuery", "click:", "doStart"]
-}),
-$globals.Timer);
-
-$core.addMethod(
-$core.method({
 selector: "initialize",
 protocol: 'initialization',
 fn: function (){
@@ -377,6 +305,52 @@ $globals.Timer);
 
 $core.addMethod(
 $core.method({
+selector: "notifyFinish",
+protocol: 'action',
+fn: function (){
+"use strict";
+
+var self=this;
+var newNotify;
+function $Notify(){return $globals.Notify||(typeof Notify=="undefined"?nil:Notify)}
+function $Terminal(){return $globals.Terminal||(typeof Terminal=="undefined"?nil:Terminal)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+newNotify=$recv($Notify())._newValue_value_("Finish",$globals.HashedCollection._newFromPairs_(["body","Finish","timeout",(60).__star((10))]));
+$recv(self._class())._requestPermissionOnGranted_onDenied_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(newNotify)._show();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+}),(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($Terminal())._alert_("Denied");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"notifyFinish",{newNotify:newNotify},$globals.Timer)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "notifyFinish\x0a\x09| newNotify |\x0a\x09newNotify := Notify newValue: 'Finish' value: #{#body -> 'Finish' . #timeout -> (60 * 10)}.\x0a\x09self class requestPermissionOnGranted: [newNotify show] onDenied: [Terminal alert: 'Denied']",
+referencedClasses: ["Notify", "Terminal"],
+//>>excludeEnd("ide");
+messageSends: ["newValue:value:", "*", "requestPermissionOnGranted:onDenied:", "class", "show", "alert:"]
+}),
+$globals.Timer);
+
+$core.addMethod(
+$core.method({
 selector: "selectedTimer",
 protocol: 'model accessing',
 fn: function (){
@@ -453,7 +427,7 @@ $5=$recv(ko)._observable_($recv($recv(selected)._value()).__star((60)));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["observable:"]=2;
 //>>excludeEnd("ctx");
-$2=$globals.HashedCollection._newFromPairs_(["availableTimers",$3,"selectedTimer",$4,"counter",$5,"wantsAlert",$recv(ko)._observable_(true)]);
+$2=$globals.HashedCollection._newFromPairs_(["availableTimers",$3,"selectedTimer",$4,"counter",$5,"wantsAlert",$recv(ko)._observable_("notify")]);
 $recv($1)._addAll_($2);
 $recv(ko)._applyBindings_(self["@viewModel"]);
 return self;
@@ -463,7 +437,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "setupModel\x0a\x0a\x09| selected | \x0a\x09selected := (ko observable: 25) .\x0a\x09viewModel := #{}.\x0a\x09viewModel addAll: \x0a\x09\x09#{\x0a\x09\x09\x09#availableTimers -> (ko observableArray: #(5 10 25)) .\x0a\x09\x09\x09#selectedTimer -> selected .\x0a\x09\x09\x09#counter -> (ko observable: selected value * 60) .\x0a\x09\x09\x09#wantsAlert -> (ko observable: true)\x0a\x09\x09}.\x0a\x09ko applyBindings: viewModel",
+source: "setupModel\x0a\x0a\x09| selected | \x0a\x09selected := (ko observable: 25) .\x0a\x09viewModel := #{}.\x0a\x09viewModel addAll: \x0a\x09\x09#{\x0a\x09\x09\x09#availableTimers -> (ko observableArray: #(5 10 25)) .\x0a\x09\x09\x09#selectedTimer -> selected .\x0a\x09\x09\x09#counter -> (ko observable: selected value * 60) .\x0a\x09\x09\x09#wantsAlert -> (ko observable: #notify) \x0a\x09\x09}.\x0a\x09ko applyBindings: viewModel",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["observable:", "addAll:", "observableArray:", "*", "value", "applyBindings:"]
@@ -614,7 +588,6 @@ fn: function (){
 "use strict";
 
 var self=this;
-function $Terminal(){return $globals.Terminal||(typeof Terminal=="undefined"?nil:Terminal)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
@@ -622,7 +595,7 @@ var $1;
 $1=$recv(self._counter()).__lt((1));
 if($core.assert($1)){
 self._doAction();
-$recv($Terminal())._alert_("Finish !");
+self._alertFinish();
 } else {
 self._decrementCounter();
 };
@@ -633,10 +606,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "timerAction\x0a\x09\x0a\x09self counter < 1\x0a\x09\x09ifTrue: [self doAction.\x0a\x09\x09\x09\x09Terminal alert: 'Finish !']\x0a\x09\x09ifFalse: [self decrementCounter]",
-referencedClasses: ["Terminal"],
+source: "timerAction\x0a\x09\x0a\x09self counter < 1\x0a\x09\x09ifTrue: [self doAction.\x0a\x09\x09\x09\x09self alertFinish]\x0a\x09\x09ifFalse: [self decrementCounter]",
+referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:ifFalse:", "<", "counter", "doAction", "alert:", "decrementCounter"]
+messageSends: ["ifTrue:ifFalse:", "<", "counter", "doAction", "alertFinish", "decrementCounter"]
 }),
 $globals.Timer);
 
@@ -764,6 +737,205 @@ messageSends: ["value", "at:", "viewModel"]
 }),
 $globals.Timer);
 
+$core.addMethod(
+$core.method({
+selector: "wantsAlert:",
+protocol: 'model accessing',
+fn: function (selectedOption){
+"use strict";
+
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv($recv(self._viewModel())._at_("wantsAlert"))._value_(selectedOption);
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"wantsAlert:",{selectedOption:selectedOption},$globals.Timer)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["selectedOption"],
+source: "wantsAlert: selectedOption\x0a\x0a\x09^ (self viewModel at: #wantsAlert) value: selectedOption",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["value:", "at:", "viewModel"]
+}),
+$globals.Timer);
+
+
+$core.addMethod(
+$core.method({
+selector: "isSupported",
+protocol: 'notification',
+fn: function (){
+"use strict";
+
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+ return Notify.isSupported ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"isSupported",{},$globals.Timer.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isSupported\x0a\x09< return Notify.isSupported >",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Timer.klass);
+
+$core.addMethod(
+$core.method({
+selector: "needsPermission",
+protocol: 'notification',
+fn: function (){
+"use strict";
+
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+ return Notify.needsPermission ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"needsPermission",{},$globals.Timer.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "needsPermission\x0a\x09< return Notify.needsPermission > ",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Timer.klass);
+
+$core.addMethod(
+$core.method({
+selector: "notify",
+protocol: 'notification',
+fn: function (){
+"use strict";
+
+var self=this;
+function $Notify(){return $globals.Notify||(typeof Notify=="undefined"?nil:Notify)}
+return $Notify();
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "notify\x0a\x09^Notify ",
+referencedClasses: ["Notify"],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Timer.klass);
+
+$core.addMethod(
+$core.method({
+selector: "permissionLevel",
+protocol: 'notification',
+fn: function (){
+"use strict";
+
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+ return Notify.permissionLevel ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"permissionLevel",{},$globals.Timer.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "permissionLevel\x0a\x09< return Notify.permissionLevel >",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Timer.klass);
+
+$core.addMethod(
+$core.method({
+selector: "request",
+protocol: 'starting',
+fn: function (){
+"use strict";
+
+var self=this;
+function $Timer(){return $globals.Timer||(typeof Timer=="undefined"?nil:Timer)}
+function $Terminal(){return $globals.Terminal||(typeof Terminal=="undefined"?nil:Terminal)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv($Timer())._requestPermissionOnGranted_onDenied_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($Terminal())._alert_("Granted");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["alert:"]=1;
+//>>excludeEnd("ctx");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+}),(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($Terminal())._alert_("Denied");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"request",{},$globals.Timer.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "request\x0a\x0a\x09Timer requestPermissionOnGranted: [Terminal alert: 'Granted'] onDenied: [Terminal alert: 'Denied']",
+referencedClasses: ["Timer", "Terminal"],
+//>>excludeEnd("ide");
+messageSends: ["requestPermissionOnGranted:onDenied:", "alert:"]
+}),
+$globals.Timer.klass);
+
+$core.addMethod(
+$core.method({
+selector: "requestPermissionOnGranted:onDenied:",
+protocol: 'notification',
+fn: function (aGrantedBlock,aDeniedBlock){
+"use strict";
+
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+ Notify.requestPermission(aGrantedBlock, aDeniedBlock) ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"requestPermissionOnGranted:onDenied:",{aGrantedBlock:aGrantedBlock,aDeniedBlock:aDeniedBlock},$globals.Timer.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aGrantedBlock", "aDeniedBlock"],
+source: "requestPermissionOnGranted: aGrantedBlock onDenied: aDeniedBlock\x0a\x09< Notify.requestPermission(aGrantedBlock, aDeniedBlock) >",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Timer.klass);
 
 $core.addMethod(
 $core.method({

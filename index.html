@@ -33,7 +33,8 @@
                        optionsCaption: '-選択してください-'"></select></p>
   </div>
   <div>
-    <input id="announce" type="checkbox" data-bind="checked: wantsAlert">アラート</input>
+    <input id="announce" type="radio" value="notify"  data-bind="checked: wantsAlert">ノーティフィケーション</input>
+    <input id="announce" type="radio" value="dialog"  data-bind="checked: wantsAlert">ダイアログ</input>
   </div>
   <button id="start">START</button>
   <div><span data-bind="text: counter"></span>
