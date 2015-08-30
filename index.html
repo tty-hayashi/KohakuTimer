@@ -3,6 +3,7 @@
 
   <head>
     <title>Timer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="tetha" />
     <script type='text/javascript' src='the.js'></script>
@@ -21,6 +22,15 @@
 	        height: 50px;
 	        width: 200px;
 	    }
+
+@media screen and (min-width : 768px){
+    html{ font-size : 120%;} 
+}
+ 
+@media screen and (min-width : 1024px) {
+    html{ font-size : 100%}; 
+}
+
     </style>
 
   </head>
@@ -33,7 +43,8 @@
                        optionsCaption: '-選択してください-'"></select></p>
   </div>
   <div>
-    <input id="announce" type="checkbox" data-bind="checked: wantsAlert">アラート</input>
+    <input id="announce" type="radio" value="notify"  data-bind="checked: wantsAlert">ノーティフィケーション</input>
+    <input id="announce" type="radio" value="dialog"  data-bind="checked: wantsAlert">ダイアログ</input>
   </div>
   <button id="start">START</button>
   <div><span data-bind="text: counter"></span>

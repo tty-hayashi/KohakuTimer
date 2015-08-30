@@ -1,5 +1,5 @@
 Smalltalk createPackage: 'Timer'!
-(Smalltalk packageAt: 'Timer') imports: {'ko' -> 'knockout'. 'amber/jquery/Wrappers-JQuery'. 'amber/web/Web'. 'sevenSeg'. 'silk/Silk'}!
+(Smalltalk packageAt: 'Timer') imports: {'ko' -> 'knockout'. 'Notify' -> 'notifyjs'. 'amber/jquery/Wrappers-JQuery'. 'amber/web/Web'. 'sevenSeg'. 'silk/Silk'}!
 Object subclass: #Timer
 	instanceVariableNames: 'timerProcess viewModel'
 	package: 'Timer'!
@@ -32,8 +32,10 @@ viewModel: anObject
 
 alertFinish
 	
-	self wantsAlert ifTrue: [
-				Terminal alert: 'Finish !!']
+	self wantsAlert = 'dialog' ifTrue: [
+				Terminal alert: 'Finish !!'].
+	self wantsAlert = 'notify' ifTrue: [
+				self notifyFinish].
 !
 
 decrementCounter
@@ -51,24 +53,15 @@ doAction
 			'#start' asJQuery text: 'STOP'.].
 !
 
-doStart
-
-	self setupCounter.
-	self setupTimerProcess.
-	'#start' asJQuery text: 'STOP'.
-	'#start' asJQuery click: [self doStop]
-!
-
-doStop
-
-	self stopTimerProcess.
-	'#start' asJQuery text: 'START'.
-	'#start' asJQuery click: [self doStart]
-!
-
 isRunning
 
 	^self timerProcess notNil
+!
+
+notifyFinish
+	| newNotify |
+	newNotify := Notify newValue: 'Finish' value: #{#body -> 'Finish' . #timeout -> (60 * 10)}.
+	self class requestPermissionOnGranted: [newNotify show] onDenied: [Terminal alert: 'Denied']
 !
 
 setupCounter
@@ -93,7 +86,7 @@ timerAction
 	
 	self counter < 1
 		ifTrue: [self doAction.
-				Terminal alert: 'Finish !!']
+				self alertFinish]
 		ifFalse: [self decrementCounter]
 ! !
 
@@ -118,7 +111,7 @@ setupModel
 			#availableTimers -> (ko observableArray: #(5 10 25)) .
 			#selectedTimer -> selected .
 			#counter -> (ko observable: selected value * 60) .
-			#wantsAlert -> (ko observable: true)
+			#wantsAlert -> (ko observable: #notify) 
 		}.
 	ko applyBindings: viewModel
 !
@@ -154,6 +147,11 @@ selectedTimer
 wantsAlert
 
 	^ (self viewModel at: #wantsAlert) value
+!
+
+wantsAlert: selectedOption
+
+	^ (self viewModel at: #wantsAlert) value: selectedOption
 ! !
 
 !Timer methodsFor: 'starting'!
@@ -171,7 +169,34 @@ augmentPage
 	self setupModel
 ! !
 
+!Timer class methodsFor: 'notification'!
+
+isSupported
+	< return Notify.isSupported >
+!
+
+needsPermission
+	< return Notify.needsPermission >
+!
+
+notify
+	^Notify
+!
+
+permissionLevel
+	< return Notify.permissionLevel >
+!
+
+requestPermissionOnGranted: aGrantedBlock onDenied: aDeniedBlock
+	< Notify.requestPermission(aGrantedBlock, aDeniedBlock) >
+! !
+
 !Timer class methodsFor: 'starting'!
+
+request
+
+	Timer requestPermissionOnGranted: [Terminal alert: 'Granted'] onDenied: [Terminal alert: 'Denied']
+!
 
 start
 	self new augmentPage
