@@ -60,7 +60,7 @@ isRunning
 
 notifyFinish
 	| newNotify |
-	newNotify := Notify newValue: 'Finish' value: #{#body -> 'Finish' . #timeout -> (60 * 10)}.
+	newNotify := Notify newValue: 'Finish' value: #{#body -> 'Finish' . #timeout -> (60 * 30)}.
 	self class requestPermissionOnGranted: [newNotify show] onDenied: [Terminal alert: 'Denied']
 !
 

@@ -317,7 +317,7 @@ function $Terminal(){return $globals.Terminal||(typeof Terminal=="undefined"?nil
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-newNotify=$recv($Notify())._newValue_value_("Finish",$globals.HashedCollection._newFromPairs_(["body","Finish","timeout",(60).__star((10))]));
+newNotify=$recv($Notify())._newValue_value_("Finish",$globals.HashedCollection._newFromPairs_(["body","Finish","timeout",(60).__star((30))]));
 $recv(self._class())._requestPermissionOnGranted_onDenied_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
@@ -342,7 +342,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "notifyFinish\x0a\x09| newNotify |\x0a\x09newNotify := Notify newValue: 'Finish' value: #{#body -> 'Finish' . #timeout -> (60 * 10)}.\x0a\x09self class requestPermissionOnGranted: [newNotify show] onDenied: [Terminal alert: 'Denied']",
+source: "notifyFinish\x0a\x09| newNotify |\x0a\x09newNotify := Notify newValue: 'Finish' value: #{#body -> 'Finish' . #timeout -> (60 * 30)}.\x0a\x09self class requestPermissionOnGranted: [newNotify show] onDenied: [Terminal alert: 'Denied']",
 referencedClasses: ["Notify", "Terminal"],
 //>>excludeEnd("ide");
 messageSends: ["newValue:value:", "*", "requestPermissionOnGranted:onDenied:", "class", "show", "alert:"]
